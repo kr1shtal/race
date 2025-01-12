@@ -1,3 +1,5 @@
+import enemy
+import player
 import pygame
 
 width, height = 800, 700
@@ -15,6 +17,9 @@ def run():
 
     pygame.font.init()
 
+    shadow = pygame.font.Font("font/PressStart2P-Regular.ttf", 40)
+    font = pygame.font.Font("font/PressStart2P-Regular.ttf", 40)
+
     running = True
 
     while running:
@@ -28,10 +33,16 @@ def run():
 
         window.blit(background, (0, 0))
 
-        pygame.display.update()
+        player_car.update(window)
+        enemy_car.update(window)
+
+        pygame.display.flip()
         pygame.time.Clock().tick(60)
 
 
 if __name__ == "__main__":
+    player_car = player.Player()
+    enemy_car = enemy.Enemy()
+
     run()
     pygame.quit()
