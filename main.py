@@ -33,6 +33,12 @@ def run():
 
         window.blit(background, (0, 0))
 
+        score_shadow = shadow.render("Score: " + str(enemy_car.score), True, "black")
+        score_text = font.render("Score: " + str(enemy_car.score), True, "white")
+
+        window.blit(score_shadow, (20, 20))
+        window.blit(score_text, (15, 15))
+
         player_car.update(window)
         enemy_car.update(window)
 
