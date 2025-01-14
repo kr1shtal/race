@@ -1,4 +1,5 @@
 import pygame
+from main import height, width
 
 
 class Player:
@@ -7,16 +8,16 @@ class Player:
             pygame.image.load("img/black.png"), (64, 128)
         )
         self.rect = self.image.get_rect()
-        self.rect.x = 400 - 64
-        self.rect.y = 700 - 128
+        self.rect.x = width / 2 - 32
+        self.rect.y = height - 128
         self.speed = 10
+        self.life = 3
 
     def render(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
     def move(self):
         keys = pygame.key.get_pressed()
-
         if keys[pygame.K_w] and self.rect.y > 0:
             self.rect.y -= self.speed
         if keys[pygame.K_s] and self.rect.y < 570:
