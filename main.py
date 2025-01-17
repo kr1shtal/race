@@ -37,7 +37,7 @@ def restart():
 
     player_car.rect.x = 400 - 64
     player_car.rect.y = 700 - 128
-    player_car.score = 0
+    enemy_car.score = 0
     player_car.life = 3
 
     enemy_car.rect.x = random.randint(130, 610)
@@ -88,6 +88,7 @@ def run():
             enemy_car.update(window)
 
             if player_car.rect.colliderect(enemy_car.rect):
+                crash_sound.play()
                 enemy_car.rect.y = -128
                 enemy_car.rect.x = random.randint(130, 610)
                 player_car.life -= 1
@@ -104,6 +105,12 @@ def run():
 
 if __name__ == "__main__":
     pygame.font.init()
+
+    pygame.mixer.init()
+    pygame.mixer.music.load("audio/bgm.mp3")
+    pygame.mixer.music.play(loops=-1)
+
+    crash_sound = pygame.mixer.Sound("audio/crash.mp3")
 
     font = pygame.font.Font("font/PressStart2P-Regular.ttf", 40)
     game_over_font = pygame.font.Font("font/PressStart2P-Regular.ttf", 64)
