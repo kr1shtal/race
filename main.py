@@ -1,5 +1,3 @@
-import random
-
 import enemy
 import player
 import pygame
@@ -10,6 +8,11 @@ window = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Car Racing")
 
 is_game_over = False
+
+cars = pygame.sprite.Group()
+for i in range(3):
+    car = enemy.Enemy()
+    cars.add(car)
 
 
 def game_over():
@@ -34,19 +37,17 @@ def restart():
     global is_game_over
 
     is_game_over = False
-
+    enemy.score = 0
     player_car.rect.x = 400 - 64
     player_car.rect.y = 700 - 128
-    enemy_car.score = 0
     player_car.life = 3
-
-    enemy_car.rect.x = random.randint(130, 610)
-    enemy_car.rect.y = -128
+    for c in cars:
+        c.spawn_car()
 
 
 def render_text():
-    score_shadow = font.render("Score:" + str(enemy_car.score), True, "black")
-    score_text = font.render("Score:" + str(enemy_car.score), True, "white")
+    score_shadow = font.render("Score:" + str(enemy.score), True, "black")
+    score_text = font.render("Score:" + str(enemy.score), True, "white")
 
     life_shadow = font.render("Life:" + str(player_car.life), True, "black")
     life_text = font.render("Life:" + str(player_car.life), True, "white")
@@ -85,17 +86,18 @@ def run():
             window.blit(background, (0, 0))
 
             player_car.update(window)
-            enemy_car.update(window)
 
-            if player_car.rect.colliderect(enemy_car.rect):
+            cars.update(window)
+            cars.draw(window)
+
+            if pygame.sprite.spritecollide(player_car, cars, True):
                 crash_sound.play()
-                enemy_car.rect.y = -128
-                enemy_car.rect.x = random.randint(130, 610)
+                car = enemy.Enemy()
+                cars.add(car)
                 player_car.life -= 1
-                player_car.rect.y = height - 128
 
-                if player_car.life == 0:
-                    game_over()
+            if player_car.life == 0:
+                game_over()
 
             render_text()
 
@@ -116,7 +118,6 @@ if __name__ == "__main__":
     game_over_font = pygame.font.Font("font/PressStart2P-Regular.ttf", 64)
 
     player_car = player.Player()
-    enemy_car = enemy.Enemy()
 
     run()
     pygame.quit()
