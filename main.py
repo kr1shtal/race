@@ -1,3 +1,5 @@
+import math
+
 import enemy
 import player
 import pygame
@@ -68,6 +70,9 @@ def run():
         pygame.image.load("img/background.png"), (width, height)
     )
 
+    tiles = math.ceil(height / background.get_height()) + 1
+    scroll = 0
+
     running = True
 
     while running:
@@ -83,7 +88,13 @@ def run():
             restart()
 
         if not is_game_over:
-            window.blit(background, (0, 0))
+            for i in range(0, -tiles, -1):
+                window.blit(background, (0, i * background.get_height() + scroll))
+
+            scroll += 5
+
+            if scroll > background.get_height():
+                scroll = 0
 
             player_car.update(window)
 
